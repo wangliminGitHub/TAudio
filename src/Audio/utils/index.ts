@@ -2,9 +2,10 @@
  * @Author: princemwang
  * @Date: 2022-08-01 12:23:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-01 15:46:38
+ * @LastEditTime: 2022-08-02 17:08:50
  */
 import React from 'react';
+import { isMobile } from 'react-device-detect';
 
 export const judgeChildren = (children: any): boolean => {
   const types = ['null', 'undefined', 'string', 'number', 'boolean'];
@@ -58,4 +59,13 @@ export const setAudioTime = (time: number) => {
     ? `${hourText}:${minuteText}:${secondText}`
     : `${minuteText}:${secondText}`;
   return timeText;
+};
+export const handleType = {
+  start: isMobile ? 'touchstart' : 'mousedown',
+  move: isMobile ? 'touchmove' : 'mousemove',
+  end: isMobile ? 'touchend' : 'mouseup',
+};
+export const hoverHandle = {
+  enter: isMobile ? 'touchstart' : 'mouseenter',
+  leave: isMobile ? 'touchend' : 'mouseleave',
 };
