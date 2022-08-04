@@ -2,7 +2,7 @@
  * @Author: princemwang
  * @Date: 2022-08-01 15:36:17
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-04 11:18:05
+ * @LastEditTime: 2022-08-04 14:20:34
  */
 import React, { useState, useLayoutEffect, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
@@ -117,13 +117,22 @@ export const useClientpostion = (
   useLayoutEffect(() => {
     const progressDom = progressRef.current;
     if (!progressDom) return;
+    let left = 0;
+    let top = 0;
+
     const getClient = (event: any) => {
       const clientX = event.clientX ?? event.touches[0].clientX;
       const clientY = event.clientY ?? event.touches[0].clientY;
-      const { x, y } = progressDom.getBoundingClientRect();
-      const postionX = clientX - x;
-      const postionY = clientY - y;
-      setPostion({ x: postionX, y: postionY });
+      let postionX = clientX - left;
+      let postionY = clientY - top;
+      if (postionY < 0) {
+        postionY = 0;
+      }
+      if (postionX < 0) {
+        postionX = 0;
+      }
+      const postion = { x: postionX, y: postionY };
+      setPostion(postion);
     };
     const handleMove = (event: any) => {
       getClient(event);
@@ -140,6 +149,9 @@ export const useClientpostion = (
       document.removeEventListener(handleType.end, handleEnd);
     };
     const handleStart = (event: any) => {
+      const { x, y } = progressDom.getBoundingClientRect();
+      left = x;
+      top = y;
       getClient(event);
       document.addEventListener(handleType.move, handleMove);
       document.addEventListener(handleType.end, handleEnd);

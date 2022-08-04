@@ -2,7 +2,7 @@
  * @Author: princemwang
  * @Date: 2022-08-03 09:47:49
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-04 11:21:22
+ * @LastEditTime: 2022-08-04 14:22:08
  */
 import React, { useCallback, useRef, useMemo, useState, useEffect, useLayoutEffect } from 'react';
 import { isMobile } from 'react-device-detect';
@@ -46,13 +46,16 @@ export const Volume = ({
       volumeSizeRef.current = audioDom.volume;
       audioDom.volume = 0;
     } else {
+      if (volumeSizeRef.current === 0) {
+        volumeSizeRef.current = 1;
+      }
       audioDom.volume = volumeSizeRef.current;
     }
     const percentage = `${audioDom.volume * 100}%`;
     setVerticalProgressHeight(percentage);
   }, [volumeState.muted, audioRef]);
   const mutedChange = useCallback(
-    (e: any) => {
+    (event: any) => {
       if (type === 'vertical') {
         if (volumeVDisplay === 'none') {
           setVolumeVDisplay('block');
@@ -62,10 +65,8 @@ export const Volume = ({
       } else {
         setVolume();
       }
-      if (e && e.stopPropagation) {
-        //非IE
-        console.log('icon');
-        e.stopPropagation();
+      if (!isMobile && event.preventDefault) {
+        event.preventDefault();
       }
       return false;
     },
@@ -97,8 +98,10 @@ export const Volume = ({
     if (percentage > 1) {
       percentage = 1;
     }
-    if (percentage < 0) {
+    audioDom.muted = false;
+    if (percentage <= 0) {
       percentage = 0;
+      audioDom.muted = true;
     }
     audioDom.volume = percentage;
   }, [volumeHorizontalBarPostion, progressSize, volume]);
@@ -117,6 +120,11 @@ export const Volume = ({
     const audioDom = audioRef.current;
     if (audioDom) {
       audioDom.volume = volume;
+      if (volume === 0) {
+        audioDom.muted = true;
+      } else {
+        audioDom.muted = false;
+      }
     }
   }, [postion.y, progressSize, type]);
   useEffect(() => {

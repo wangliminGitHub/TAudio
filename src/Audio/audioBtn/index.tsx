@@ -3,6 +3,7 @@ import { PlaySvg } from '../svgCom/Paly';
 import { PauseSvg } from '../svgCom/Pause';
 import { useAudioState } from '../hooks';
 import { Loading } from '../svgCom/Loading';
+import './style.css';
 
 export const AudioBtn = ({ audioRef }: { audioRef: React.RefObject<HTMLAudioElement> }) => {
   const [state] = useAudioState(audioRef);
