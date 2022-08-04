@@ -2,13 +2,14 @@
  * @Author: princemwang
  * @Date: 2022-07-06 18:21:21
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-01 16:00:25
+ * @LastEditTime: 2022-08-03 19:28:06
  */
 import React from 'react';
 
-export const MutedSvg = ({ click }: { click: () => void }) => {
+export const MutedSvg = ({ click }: { click?: () => void }) => {
   return (
     <svg
+      className="muted-icon"
       width="26"
       height="20"
       viewBox="0 0 26 20"

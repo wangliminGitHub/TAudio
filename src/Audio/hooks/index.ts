@@ -2,10 +2,12 @@
  * @Author: princemwang
  * @Date: 2022-08-01 15:36:17
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-02 17:08:39
+ * @LastEditTime: 2022-08-04 11:18:05
  */
 import React, { useState, useLayoutEffect, useEffect } from 'react';
+import { isMobile } from 'react-device-detect';
 import { setAudioTime, handleType, hoverHandle } from '../utils';
+import { HandleOptions } from '../types';
 
 type AudioRefType = React.RefObject<HTMLAudioElement>;
 
@@ -65,45 +67,80 @@ export const useAudioState = (audioRef: AudioRefType) => {
   }, [audioRef]);
   return [state, setState];
 };
+export const useClickMoveUp = (
+  targetRef: React.RefObject<HTMLDivElement>,
+  handleOptions: HandleOptions,
+) => {
+  useLayoutEffect(() => {
+    const progressDom = targetRef.current;
+    if (!progressDom) return;
+    const handleMove = (event: any) => {
+      handleOptions?.move?.(event);
+      if (event.stopPropagation) {
+        event.stopPropagation();
+      }
+      if (!isMobile && event.preventDefault) {
+        event.preventDefault();
+      }
+      return false;
+    };
+    const handleEnd = (event: any) => {
+      handleOptions?.end?.(event);
+      document.removeEventListener(handleType.move, handleMove);
+      document.removeEventListener(handleType.end, handleEnd);
+    };
+    const handleStart = (event: any) => {
+      handleOptions?.start?.(event);
+      document.addEventListener(handleType.move, handleMove);
+      document.addEventListener(handleType.end, handleEnd);
+    };
+    progressDom.addEventListener(handleType.start, handleStart);
+    return () => {
+      progressDom.removeEventListener(handleType.start, handleStart);
+      document.removeEventListener(handleType.end, handleEnd);
+      document.removeEventListener(handleType.move, handleMove);
+    };
+  }, [targetRef, handleOptions]);
+};
+interface StartPostion {
+  startX: number;
+  startY: number;
+}
 export const useClientpostion = (
   progressRef: React.RefObject<HTMLElement>,
-  audioRef: AudioRefType,
+  startPostion?: StartPostion,
 ) => {
-  const [postion, setPostion] = useState({ x: 0, y: 0 });
+  const [postion, setPostion] = useState({
+    x: startPostion?.startX || 0,
+    y: startPostion?.startY || 0,
+  });
   useLayoutEffect(() => {
     const progressDom = progressRef.current;
     if (!progressDom) return;
-    let isPlay = true;
     const getClient = (event: any) => {
       const clientX = event.clientX ?? event.touches[0].clientX;
       const clientY = event.clientY ?? event.touches[0].clientY;
-      const { x } = progressDom.getBoundingClientRect();
+      const { x, y } = progressDom.getBoundingClientRect();
       const postionX = clientX - x;
-      setPostion({ x: postionX, y: clientY });
+      const postionY = clientY - y;
+      setPostion({ x: postionX, y: postionY });
     };
     const handleMove = (event: any) => {
       getClient(event);
       if (event.stopPropagation) {
         event.stopPropagation();
       }
-      event.preventDefault();
+      if (!isMobile && event.preventDefault) {
+        event.preventDefault();
+      }
       return false;
     };
-    const handleEnd = (event: any) => {
-      if (!isPlay && audioRef.current?.paused) {
-        audioRef.current?.play();
-        isPlay = true;
-      }
+    const handleEnd = () => {
       document.removeEventListener(handleType.move, handleMove);
       document.removeEventListener(handleType.end, handleEnd);
-      getClient(event);
     };
     const handleStart = (event: any) => {
       getClient(event);
-      if (!audioRef.current?.paused) {
-        isPlay = false;
-        audioRef.current?.pause();
-      }
       document.addEventListener(handleType.move, handleMove);
       document.addEventListener(handleType.end, handleEnd);
     };
@@ -194,7 +231,6 @@ export const useLoadedWidth = (audioRef: AudioRefType) => {
     };
     audioDom.addEventListener('canplay', canplay);
     const progress = () => {
-      console.log('****');
       const percentage = audioDom.buffered.length
         ? audioDom.buffered.end(audioDom.buffered.length - 1) / audioDom.duration
         : 0;
@@ -207,4 +243,33 @@ export const useLoadedWidth = (audioRef: AudioRefType) => {
     };
   }, [audioRef]);
   return width;
+};
+export const useVolumeState = (
+  audioRef: AudioRefType,
+  muted: boolean,
+  volume: number,
+): [s: { muted: boolean; volume: number }, d: any] => {
+  const [volumeState, setVolumeState] = useState<{ muted: boolean; volume: number }>({
+    muted,
+    volume: muted ? 0 : volume,
+  });
+  useLayoutEffect(() => {
+    const audioDom = audioRef.current;
+    if (!audioDom) return;
+    if (muted) {
+      audioDom.volume = 0;
+    } else {
+      audioDom.volume = volume;
+    }
+    audioDom.muted = muted;
+    const volumechange = () => {
+      const { muted, volume } = audioDom;
+      setVolumeState({ muted, volume });
+    };
+    audioDom.addEventListener('volumechange', volumechange);
+    return () => {
+      audioDom.removeEventListener('volumechange', volumechange);
+    };
+  }, [audioRef, muted, volume]);
+  return [volumeState, setVolumeState];
 };

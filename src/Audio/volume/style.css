@@ -1,0 +1,103 @@
+.audio-volume {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.audio-volume-horizontal .volmne-icon {
+  margin-right: 10px;
+}
+.audio-volume-vertical {
+  width: 40px;
+}
+.audio-volume-horizontal {
+  width: fit-content;
+}
+.volmne-icon {
+  width: 40px;
+  text-align: center;
+  cursor: pointer;
+}
+.volume-progress {
+  position: relative;
+  height: 4px;
+  background: #cfd5de;
+  border-radius: 3px;
+}
+.volume-mute-progress {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  height: 100%;
+  background: #006eff;
+  transition: all 0.2s ease;
+}
+.volume-bar {
+  position: absolute;
+  top: -3px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  margin-right: -10px;
+  background: #006eff;
+  border-radius: 50%;
+  transform: scaleY(0);
+  transition: all 0.3s ease;
+}
+.volume-control {
+  cursor: pointer;
+}
+.volume-control-horizontal {
+  padding: 5px 0px;
+}
+.volume-control:hover .volume-bar {
+  transform: scaleY(1);
+}
+.volume-control-mask {
+  position: absolute;
+  right: 0px;
+  bottom: 20px;
+  left: 0px;
+  width: 40px;
+  padding-bottom: 20px;
+}
+.volume-control-vertical {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  padding: 15px 0px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 4px;
+}
+.vertical-progress {
+  position: relative;
+  width: 4px;
+  background: #cfd5de;
+}
+.vertical-mute-progress {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  background: #006eff;
+  transition: all 0.3s ease;
+}
+.vertical-mute-bar {
+  position: absolute;
+  top: 5px;
+  left: -3px;
+  z-index: 100;
+  width: 10px;
+  height: 10px;
+  margin-top: -10px;
+  background: #006eff;
+  border-radius: 50%;
+}
+.progress-content {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  cursor: pointer;
+}
