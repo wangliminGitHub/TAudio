@@ -7,14 +7,11 @@
 .audio-volume-horizontal .volmne-icon {
   margin-right: 10px;
 }
-.audio-volume-vertical {
-  width: 40px;
-}
 .audio-volume-horizontal {
   width: fit-content;
 }
 .volmne-icon {
-  width: 40px;
+  line-height: 0;
   text-align: center;
   cursor: pointer;
 }
@@ -61,6 +58,7 @@
   left: 0px;
   width: 40px;
   padding-bottom: 20px;
+  transform: translateX(-10px);
 }
 .volume-control-vertical {
   display: flex;

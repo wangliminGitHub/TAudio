@@ -2,18 +2,17 @@
  * @Author: princemwang
  * @Date: 2022-08-02 17:42:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-02 19:43:58
+ * @LastEditTime: 2022-08-12 18:26:59
  */
-/*
- * @Author: princemwang
- * @Date: 2022-08-01 11:28:33
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-01 17:46:39
- */
+
 import React, { useRef } from 'react';
 import { TaudioProps } from './types';
 import { AudioLayout } from './audioLayout';
-import { judgeChildren, renderChildren } from './utils';
+import { AudioSpeed } from './speed';
+import { AudioBtn } from './audioBtn';
+import { PlayTime } from './playTime';
+import { Progress } from './progress';
+import { Volume } from './volume';
 
 const TAudio = ({
   src,
@@ -22,8 +21,7 @@ const TAudio = ({
   children,
   ...props
 }: TaudioProps) => {
-  const audioRef = useRef(null);
-  const element: any = children;
+  const audioRef = useRef<HTMLAudioElement>(null);
   return (
     <div className="t-audio">
       <audio
@@ -34,14 +32,15 @@ const TAudio = ({
         src={src}
         {...props}
       ></audio>
-      {judgeChildren(children) ? (
-        renderChildren(element)
+      {typeof children === 'function' ? (
+        children(audioRef)
       ) : (
         <AudioLayout audioRef={audioRef}></AudioLayout>
       )}
     </div>
   );
 };
+export { AudioBtn, PlayTime, AudioSpeed, Progress, Volume };
 export default () => {
   return <TAudio src="https://webcast.tencent.com/assets/bensound-dreams.mp3"></TAudio>;
 };

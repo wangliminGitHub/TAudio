@@ -1,0 +1,16 @@
+.t-audio-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.control-left {
+  display: flex;
+  flex: 1;
+}
+.control-right {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
+}

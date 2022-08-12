@@ -4,14 +4,17 @@ import React from 'react';
  * @Author: princemwang
  * @Date: 2022-08-01 11:51:39
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-03 17:32:45
+ * @LastEditTime: 2022-08-12 18:22:51
  */
-export interface TaudioProps extends React.MediaHTMLAttributes<HTMLAudioElement> {
+
+export type MediaAttributes = Omit<React.MediaHTMLAttributes<HTMLAudioElement>, 'children'>;
+export interface TaudioProps extends MediaAttributes {
   /**
    * 音频地址
    */
   src: string;
   crossOriginIsolated?: string;
+  children?: (ref: React.RefObject<HTMLAudioElement>) => React.ReactNode;
 }
 export interface VolumeProps {
   audioRef: React.RefObject<HTMLAudioElement>;

@@ -2,9 +2,9 @@
  * @Author: princemwang
  * @Date: 2022-08-03 09:47:49
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-04 14:22:08
+ * @LastEditTime: 2022-08-12 14:19:18
  */
-import React, { useCallback, useRef, useMemo, useState, useEffect, useLayoutEffect } from 'react';
+import React, { useCallback, useRef, useMemo, useState, useEffect } from 'react';
 import { isMobile } from 'react-device-detect';
 import { VolumeProps } from '../types';
 import { MuteSvg } from '../svgCom/Mute';
@@ -60,6 +60,9 @@ export const Volume = ({
         if (volumeVDisplay === 'none') {
           setVolumeVDisplay('block');
         } else {
+          if (isMobile) {
+            return setVolumeVDisplay('none');
+          }
           setVolume();
         }
       } else {
@@ -128,7 +131,7 @@ export const Volume = ({
     }
   }, [postion.y, progressSize, type]);
   useEffect(() => {
-    if (isMobile && type === 'horizontal') return;
+    if (isMobile || type === 'horizontal') return;
     const timeOut = setTimeout(() => {
       if (!isHoverBtn && !isHoverMask && volumeVDisplay === 'block') {
         setVolumeVDisplay('none');

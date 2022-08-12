@@ -2,7 +2,7 @@
  * @Author: princemwang
  * @Date: 2022-08-01 12:23:33
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-03 16:39:48
+ * @LastEditTime: 2022-08-12 17:27:25
  */
 import React from 'react';
 import { isMobile } from 'react-device-detect';
@@ -11,17 +11,18 @@ export const judgeChildren = (children: any): boolean => {
   const types = ['null', 'undefined', 'string', 'number', 'boolean'];
   let isElement = true;
   React.Children.forEach(children, (child) => {
+    console.log(child, 'child');
     if (types.includes(typeof child)) {
       isElement = false;
     }
   });
   if (!isElement) return isElement;
-  if (children && React.Children.count(children) === 1) return true;
+  if (children && React.Children.count(children) === 1 && typeof children === 'function')
+    return true;
   return false;
 };
 export const renderChildren = (children: React.ReactElement) => {
   return React.Children.map(children.props.children, (child) => {
-    console.log(child, 'child');
     return React.cloneElement(child, {}, child.props.children);
   });
 };
