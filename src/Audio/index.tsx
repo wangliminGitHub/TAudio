@@ -2,7 +2,7 @@
  * @Author: princemwang
  * @Date: 2022-08-02 17:42:29
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-08-12 18:26:59
+ * @LastEditTime: 2023-01-17 11:06:39
  */
 
 import React, { useRef } from 'react';
@@ -42,5 +42,7 @@ const TAudio = ({
 };
 export { AudioBtn, PlayTime, AudioSpeed, Progress, Volume };
 export default () => {
-  return <TAudio src="https://webcast.tencent.com/assets/bensound-dreams.mp3"></TAudio>;
+  return (
+    <TAudio src="https://1500013868.vod2.myqcloud.com/6cab5142vodcq1500013868/b6b1b12e387702304767512641/AHa2WeLyBUQA.mp3"></TAudio>
+  );
 };
